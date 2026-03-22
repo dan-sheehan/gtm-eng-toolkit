@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+.venv/
+venv/
+
+# Environment
+.env
+*.key
+*.pem
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# SQLite databases
+*.db
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Company context data (user-specific)
+data/contexts/*.md
+data/contexts/*/
+!data/contexts/.gitkeep
+
+# Morning brief data (user-specific)
+.morning-brief/

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>View Playbook</title>
+    <link rel="stylesheet" href="{{ prefix }}/static/style.css" />
+  </head>
+  <body data-page="view">
+    <div class="container">
+      <header class="header">
+        <div>
+          <div class="eyebrow">Playbook</div>
+          <h1 class="title" id="view-title">Loading...</h1>
+          <p class="subtitle" id="view-meta"></p>
+        </div>
+        <div class="header-actions">
+          <a class="ghost-button" href="/">Home</a>
+          <a class="ghost-button" href="{{ prefix }}/">Back</a>
+          <button class="ghost-button" id="download-btn">Download .md</button>
+          <button class="ghost-button danger" id="delete-btn">Delete</button>
+        </div>
+      </header>
+
+      <section class="card">
+        <div class="output-area" id="output-area">Loading...</div>
+      </section>
+    </div>
+
+    <script>window.APP_PREFIX = "{{ prefix }}";</script>
+    <script>window.PLAYBOOK_ID = {{ playbook_id }};</script>
+    <script src="{{ prefix }}/static/app.js"></script>
+  </body>
+</html>

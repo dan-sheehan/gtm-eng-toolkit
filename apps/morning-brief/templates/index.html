@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Morning Brief</title>
+  <link rel="stylesheet" href="{{ prefix }}/static/style.css" />
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      <div>
+        <div class="eyebrow">Daily</div>
+        <h1 class="title">Morning Brief</h1>
+      </div>
+      <div class="header-actions">
+        <span id="timestamp" class="timestamp"></span>
+        <a class="ghost-button" href="/">Home</a>
+        <button id="refresh-btn" class="ghost-button">Refresh</button>
+      </div>
+    </header>
+
+    <div id="error-banner" class="error-banner" style="display:none"></div>
+
+    <section class="card" id="weather-card">
+      <div class="section-title">Weather</div>
+      <div class="card-body placeholder">Loading...</div>
+    </section>
+
+    <section class="card" id="calendar-card">
+      <div class="section-title">Calendar</div>
+      <div class="card-body placeholder">Loading...</div>
+    </section>
+
+    <section class="card" id="email-card">
+      <div class="section-title">Email</div>
+      <div class="card-body placeholder">Loading...</div>
+    </section>
+
+    <section class="card" id="tasks-card">
+      <div class="section-title">Tasks</div>
+      <div class="card-body placeholder">Loading...</div>
+    </section>
+  </div>
+
+  <script>window.APP_PREFIX = "{{ prefix }}";</script>
+  <script src="{{ prefix }}/static/app.js"></script>
+</body>
+</html>

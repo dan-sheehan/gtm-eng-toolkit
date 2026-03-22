@@ -1,0 +1,71 @@
+#!/bin/bash
+# Usage: hub start   (start all apps + gateway)
+#        hub stop    (stop all)
+#        hub status  (show what's running)
+
+DIR="$(cd "$(dirname "$0")" && pwd)"
+cd "$DIR"
+
+stop_all() {
+  echo "Stopping all apps..."
+  pkill -f "gateway.py serve" 2>/dev/null
+  pkill -f "prompts.py serve" 2>/dev/null
+  pkill -f "brief.py serve" 2>/dev/null
+  pkill -f "playbook.py serve" 2>/dev/null
+  pkill -f "discovery.py serve" 2>/dev/null
+  pkill -f "competitive_intel.py serve" 2>/dev/null
+  pkill -f "prompt_builder.py serve" 2>/dev/null
+  pkill -f "outbound_email.py serve" 2>/dev/null
+  pkill -f "gtm_trends.py serve" 2>/dev/null
+  echo "Done."
+}
+
+start_all() {
+  stop_all 2>/dev/null
+
+  echo "Starting apps..."
+  python3 apps/prompts/prompts.py serve --port 3002 --prefix /prompts &
+  python3 apps/morning-brief/brief.py serve --port 3003 --prefix /brief &
+  python3 apps/playbook/playbook.py serve --port 3004 --prefix /playbook &
+  python3 apps/discovery/discovery.py serve --port 3005 --prefix /discovery &
+  python3 apps/competitive-intel/competitive_intel.py serve --port 3006 --prefix /competitive-intel &
+  python3 apps/prompt-builder/prompt_builder.py serve --port 3007 --prefix /prompt-builder &
+  python3 apps/outbound-email/outbound_email.py serve --port 3008 --prefix /outbound-email &
+  python3 apps/gtm-trends/gtm_trends.py serve --port 3009 --prefix /gtm-trends &
+  sleep 1
+  python3 apps/gateway/gateway.py serve --port 8000 &
+
+  echo ""
+  echo "All apps running at http://localhost:8000"
+  echo "Run 'hub stop' to shut down."
+  echo ""
+  wait
+}
+
+show_status() {
+  echo "App status:"
+  for name in gateway prompts brief playbook discovery; do
+    if pgrep -f "${name}.py serve" >/dev/null 2>&1; then
+      echo "  $name: running"
+    else
+      echo "  $name: stopped"
+    fi
+  done
+  for name in competitive_intel prompt_builder outbound_email gtm_trends; do
+    if pgrep -f "${name}.py serve" >/dev/null 2>&1; then
+      echo "  $name: running"
+    else
+      echo "  $name: stopped"
+    fi
+  done
+}
+
+case "$1" in
+  start)  start_all ;;
+  stop)   stop_all ;;
+  status) show_status ;;
+  *)
+    echo "Usage: hub {start|stop|status}"
+    exit 1
+    ;;
+esac

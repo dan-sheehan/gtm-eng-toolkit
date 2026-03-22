@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>GTM Trends</title>
+    <link rel="stylesheet" href="{{ prefix }}/static/style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <header class="header">
+        <div>
+          <div class="eyebrow">Research</div>
+          <h1 class="title">GTM Trends</h1>
+          <p class="subtitle">Paste job descriptions to spot tool & skill patterns across GTM Engineering roles.</p>
+        </div>
+        <div class="header-actions">
+          <a class="ghost-button" href="/">Home</a>
+        </div>
+      </header>
+
+      <!-- Input Section -->
+      <section class="card" id="input-section">
+        <div class="form-stack">
+          <div class="form-group">
+            <label for="jd-input">Job Descriptions</label>
+            <p class="hint">Paste one or more JDs. Separate multiple JDs with <code>---</code> on its own line.</p>
+            <textarea id="jd-input" rows="12" placeholder="Paste your first job description here...
+
+---
+
+Paste your second job description here...
+
+---
+
+Paste your third job description here..."></textarea>
+          </div>
+          <div class="form-row-between">
+            <span class="jd-count" id="jd-count">0 JDs detected</span>
+            <button class="primary-button" id="analyze-btn" disabled>Analyze</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Loading State -->
+      <div class="loading-state hidden" id="loading">
+        <div class="spinner"></div>
+        <p>Analyzing job descriptions...</p>
+      </div>
+
+      <!-- Results Section -->
+      <div class="hidden" id="results">
+        <div class="results-header">
+          <h2 class="section-title">Results</h2>
+          <span class="badge" id="results-badge"></span>
+          <button class="ghost-button" id="reset-btn">New Analysis</button>
+        </div>
+
+        <!-- Tool Frequency Chart -->
+        <section class="card" id="tools-card">
+          <h3 class="card-section-title">Tool & Platform Frequency</h3>
+          <p class="card-section-desc">How often each tool appears across all JDs</p>
+          <div class="chart-wrapper">
+            <canvas id="tools-chart"></canvas>
+          </div>
+          <div id="tool-detail" class="detail-panel hidden"></div>
+        </section>
+
+        <!-- Skills Section -->
+        <section class="card" id="skills-card">
+          <h3 class="card-section-title">Technical Skills & Competencies</h3>
+          <p class="card-section-desc">Click any skill to see which JDs mention it</p>
+          <div id="skills-list"></div>
+        </section>
+
+        <!-- Category Breakdown -->
+        <section class="card" id="categories-card">
+          <h3 class="card-section-title">Tools by Category</h3>
+          <p class="card-section-desc">Expand a category to see individual tools</p>
+          <div id="categories-list"></div>
+        </section>
+      </div>
+    </div>
+
+    <script>window.APP_PREFIX = "{{ prefix }}";</script>
+    <script src="{{ prefix }}/static/app.js"></script>
+  </body>
+</html>

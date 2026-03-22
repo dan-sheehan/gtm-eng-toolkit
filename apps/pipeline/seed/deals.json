@@ -1,0 +1,17 @@
+[
+  {"company": "Acme Corp", "contact": "Sarah Chen", "value": 85000, "stage": "negotiation", "days_in_stage": 8, "close_date": "2026-04-15"},
+  {"company": "TechFlow Inc", "contact": "Marcus Johnson", "value": 42000, "stage": "proposal", "days_in_stage": 12, "close_date": "2026-04-30"},
+  {"company": "DataBridge", "contact": "Emily Park", "value": 120000, "stage": "discovery", "days_in_stage": 5, "close_date": "2026-05-31"},
+  {"company": "CloudSync", "contact": "James Rivera", "value": 65000, "stage": "proposal", "days_in_stage": 3, "close_date": "2026-04-20"},
+  {"company": "NovaStar AI", "contact": "Priya Sharma", "value": 200000, "stage": "negotiation", "days_in_stage": 15, "close_date": "2026-04-10"},
+  {"company": "GreenLeaf SaaS", "contact": "David Kim", "value": 35000, "stage": "prospecting", "days_in_stage": 2, "close_date": "2026-06-15"},
+  {"company": "Quantum Analytics", "contact": "Lisa Tran", "value": 95000, "stage": "discovery", "days_in_stage": 7, "close_date": "2026-05-15"},
+  {"company": "PixelForge", "contact": "Ryan O'Brien", "value": 28000, "stage": "closed_won", "days_in_stage": 0, "close_date": "2026-03-10"},
+  {"company": "Meridian Health", "contact": "Aisha Johnson", "value": 150000, "stage": "proposal", "days_in_stage": 20, "close_date": "2026-04-05"},
+  {"company": "Volt Energy", "contact": "Carlos Diaz", "value": 55000, "stage": "closed_lost", "days_in_stage": 0, "close_date": "2026-03-01"},
+  {"company": "Summit Labs", "contact": "Nina Petrov", "value": 78000, "stage": "prospecting", "days_in_stage": 1, "close_date": "2026-06-30"},
+  {"company": "BrightPath Ed", "contact": "Tom Wilson", "value": 45000, "stage": "closed_won", "days_in_stage": 0, "close_date": "2026-02-28"},
+  {"company": "Atlas Logistics", "contact": "Wei Zhang", "value": 110000, "stage": "negotiation", "days_in_stage": 6, "close_date": "2026-04-25"},
+  {"company": "Nexus Financial", "contact": "Rachel Moore", "value": 180000, "stage": "discovery", "days_in_stage": 14, "close_date": "2026-05-20"},
+  {"company": "Orion Security", "contact": "Alex Thompson", "value": 92000, "stage": "closed_lost", "days_in_stage": 0, "close_date": "2026-03-15"}
+]

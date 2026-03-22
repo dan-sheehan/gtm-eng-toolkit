@@ -1,0 +1,28 @@
+{
+  "competitors": [
+    {
+      "name": "Gong.io",
+      "category": "Revenue Intelligence",
+      "known_strengths": ["Market leader in conversation intelligence", "Deep CRM integrations", "Large training data set"],
+      "known_weaknesses": ["Expensive for SMBs", "Complex implementation", "Privacy concerns with call recording"]
+    },
+    {
+      "name": "Chorus.ai (ZoomInfo)",
+      "category": "Conversation Intelligence",
+      "known_strengths": ["ZoomInfo data integration", "Strong enterprise presence", "Comprehensive contact database"],
+      "known_weaknesses": ["Post-acquisition integration complexity", "Premium pricing", "Feature overlap with parent platform"]
+    },
+    {
+      "name": "Clari",
+      "category": "Revenue Platform",
+      "known_strengths": ["Revenue forecasting accuracy", "Pipeline inspection", "Board-level reporting"],
+      "known_weaknesses": ["Narrow focus on forecasting", "Limited conversation intelligence", "Requires clean CRM data"]
+    },
+    {
+      "name": "Outreach",
+      "category": "Sales Engagement",
+      "known_strengths": ["Dominant in outbound sequencing", "Strong workflow automation", "Large customer base"],
+      "known_weaknesses": ["Deliverability challenges at scale", "Complex pricing tiers", "Steep learning curve"]
+    }
+  ]
+}

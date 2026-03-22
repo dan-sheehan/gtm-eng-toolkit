@@ -1,0 +1,59 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "prompts",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["apps/prompts/prompts.py", "serve", "--port", "3002", "--prefix", "/prompts"],
+      "port": 3002
+    },
+    {
+      "name": "morning-brief",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["apps/morning-brief/brief.py", "serve", "--port", "3003"],
+      "port": 3003
+    },
+    {
+      "name": "playbook",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["apps/playbook/playbook.py", "serve", "--port", "3004", "--prefix", "/playbook"],
+      "port": 3004
+    },
+    {
+      "name": "discovery",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["apps/discovery/discovery.py", "serve", "--port", "3005", "--prefix", "/discovery"],
+      "port": 3005
+    },
+    {
+      "name": "competitive-intel",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["apps/competitive-intel/competitive_intel.py", "serve", "--port", "3006", "--prefix", "/competitive-intel"],
+      "port": 3006
+    },
+    {
+      "name": "prompt-builder",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["apps/prompt-builder/prompt_builder.py", "serve", "--port", "3007", "--prefix", "/prompt-builder"],
+      "port": 3007
+    },
+    {
+      "name": "outbound-email",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["apps/outbound-email/outbound_email.py", "serve", "--port", "3008", "--prefix", "/outbound-email"],
+      "port": 3008
+    },
+    {
+      "name": "gtm-trends",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["apps/gtm-trends/gtm_trends.py", "serve", "--port", "3009", "--prefix", "/gtm-trends"],
+      "port": 3009
+    },
+    {
+      "name": "gateway",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["apps/gateway/gateway.py", "serve", "--port", "8000"],
+      "port": 8000
+    }
+  ]
+}

@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Onboarding Playbook Generator</title>
+    <link rel="stylesheet" href="{{ prefix }}/static/style.css" />
+  </head>
+  <body data-page="index">
+    <div class="container">
+      <header class="header">
+        <div>
+          <div class="eyebrow">AI Demo</div>
+          <h1 class="title">Onboarding Playbook Generator</h1>
+          <p class="subtitle">Generate structured onboarding playbooks for any SaaS product and customer segment.</p>
+        </div>
+        <div class="header-actions">
+          <a class="ghost-button" href="/">Home</a>
+        </div>
+      </header>
+
+      <!-- Generator Form -->
+      <section class="card form-card">
+        <h2 class="section-title">Generate a Playbook</h2>
+        <form id="generate-form">
+          <div class="form-stack">
+            <div class="form-group">
+              <label for="product_name">Product Name</label>
+              <input type="text" id="product_name" name="product_name" placeholder="e.g. Slack, Figma, Datadog" required />
+            </div>
+            <div class="form-group">
+              <label for="product_desc">Product Description</label>
+              <textarea id="product_desc" name="product_desc" rows="3" placeholder="What does the product do? Key features, use cases, and value prop." required></textarea>
+            </div>
+            <div class="form-row form-row-2">
+              <div class="form-group">
+                <label for="customer_segment">Customer Segment</label>
+                <input type="text" id="customer_segment" name="customer_segment" placeholder="e.g. Enterprise IT teams, SMB marketing" required />
+              </div>
+              <div class="form-group">
+                <label for="desired_outcomes">Desired Outcomes <span class="hint">(optional)</span></label>
+                <input type="text" id="desired_outcomes" name="desired_outcomes" placeholder="e.g. Reduce onboarding time to 14 days" />
+              </div>
+            </div>
+            <div class="actions">
+              <button type="submit" class="primary" id="generate-btn">Generate Playbook</button>
+              <span class="status" id="generate-status"></span>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- Output Area -->
+      <section class="card output-card" id="output-card" style="display:none">
+        <div class="output-header">
+          <h2 class="section-title" id="output-title">Generated Playbook</h2>
+          <div class="output-actions">
+            <button class="ghost-button" id="download-btn" style="display:none">Download .md</button>
+          </div>
+        </div>
+        <div class="output-area" id="output-area"></div>
+      </section>
+
+      <!-- Saved Playbooks -->
+      <section class="saved-section" id="saved-section">
+        <h2 class="section-title">Saved Playbooks</h2>
+        <div id="saved-list" class="saved-list"></div>
+        <div class="empty-state" id="saved-empty">No playbooks generated yet.</div>
+      </section>
+    </div>
+
+    <script>window.APP_PREFIX = "{{ prefix }}";</script>
+    <script src="{{ prefix }}/static/app.js"></script>
+  </body>
+</html>
