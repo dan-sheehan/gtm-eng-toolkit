@@ -17,7 +17,7 @@ from pathlib import Path
 from flask import Flask, g, jsonify, render_template, request
 
 APP_NAME = "icp-scorer"
-DEFAULT_PORT = 3009
+DEFAULT_PORT = 3012
 DATA_DIR = Path.home() / ".icp-scorer"
 DB_PATH = DATA_DIR / "icp_scorer.db"
 PID_PATH = DATA_DIR / "icp-scorer.pid"

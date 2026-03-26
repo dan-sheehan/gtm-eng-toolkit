@@ -24,6 +24,10 @@ pip install -r requirements.txt   # Install dependencies (Flask)
 | Competitive Intel | 3006 | `/competitive-intel` | `apps/competitive-intel/competitive_intel.py` |
 | Prompt Builder | 3007 | `/prompt-builder` | `apps/prompt-builder/prompt_builder.py` |
 | Outbound Email | 3008 | `/outbound-email` | `apps/outbound-email/outbound_email.py` |
+| GTM Trends | 3009 | `/gtm-trends` | `apps/gtm-trends/gtm_trends.py` |
+| Pipeline | 3010 | `/pipeline` | `apps/pipeline/pipeline.py` |
+| Enrichment | 3011 | `/enrichment` | `apps/enrichment/enrichment.py` |
+| ICP Scorer | 3012 | `/icp-scorer` | `apps/icp-scorer/icp_scorer.py` |
 
 **App structure**: Each app follows the same pattern — a single Python file with Flask routes + argparse (`serve --port --prefix`), a `templates/` dir with Jinja2 HTML, and `static/` with one `app.js` and one `style.css`. No build step, no frontend frameworks.
 

@@ -16,6 +16,9 @@ stop_all() {
   pkill -f "prompt_builder.py serve" 2>/dev/null
   pkill -f "outbound_email.py serve" 2>/dev/null
   pkill -f "gtm_trends.py serve" 2>/dev/null
+  pkill -f "pipeline.py serve" 2>/dev/null
+  pkill -f "enrichment.py serve" 2>/dev/null
+  pkill -f "icp_scorer.py serve" 2>/dev/null
   echo "Done."
 }
 
@@ -30,6 +33,9 @@ start_all() {
   python3 apps/prompt-builder/prompt_builder.py serve --port 3007 --prefix /prompt-builder &
   python3 apps/outbound-email/outbound_email.py serve --port 3008 --prefix /outbound-email &
   python3 apps/gtm-trends/gtm_trends.py serve --port 3009 --prefix /gtm-trends &
+  python3 apps/pipeline/pipeline.py serve --port 3010 --prefix /pipeline &
+  python3 apps/enrichment/enrichment.py serve --port 3011 --prefix /enrichment &
+  python3 apps/icp-scorer/icp_scorer.py serve --port 3012 --prefix /icp-scorer &
   sleep 1
   python3 apps/gateway/gateway.py serve --port 8000 &
 
@@ -49,7 +55,7 @@ show_status() {
       echo "  $name: stopped"
     fi
   done
-  for name in competitive_intel prompt_builder outbound_email gtm_trends; do
+  for name in competitive_intel prompt_builder outbound_email gtm_trends pipeline enrichment icp_scorer; do
     if pgrep -f "${name}.py serve" >/dev/null 2>&1; then
       echo "  $name: running"
     else
