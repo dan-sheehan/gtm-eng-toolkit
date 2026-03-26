@@ -79,5 +79,4 @@ How the tools map to the revenue lifecycle and connect into end-to-end workflows
 | Pipeline Dashboard | | | | | **Primary** | | Secondary |
 | Playbook Generator | | | | | | **Primary** | |
 | Morning Brief | | | | | Secondary | Secondary | **Primary** |
-| Prompts | Supporting | Supporting | Supporting | Supporting | | | |
 | Prompt Builder | Supporting | Supporting | Supporting | Supporting | | | |

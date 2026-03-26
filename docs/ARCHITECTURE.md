@@ -18,8 +18,8 @@ Browser (localhost:8000)
 └────┬────┬────┬────┬────┬────┬────┬──────┘
      │    │    │    │    │    │    │
      ▼    ▼    ▼    ▼    ▼    ▼    ▼
-   3002  3003 3004 3005 3006 3007 3008  3009  3010  3011
-   Prm   Brf  Plbk Disc Comp PrBd Email ICP   Pipe  Enr
+   3003 3004 3005 3006 3007 3008 3009
+   Brf  Plbk Disc Comp PrBd Email Trnd
 ```
 
 Each app is fully standalone — it can run on its own port without the gateway for development or testing.

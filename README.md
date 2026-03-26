@@ -1,28 +1,48 @@
 # GTM Tools
 
-Open-source GTM engineering toolkit — 9 AI-powered apps covering the full revenue cycle from prospecting through close to post-sale retention.
+A local-first GTM engineering toolkit that automates the research, scoring, and outreach workflows revenue teams do manually every day.
 
-Local-first. No SaaS dependencies. Clone, install, run.
+Built with Python, Flask, SQLite, and Claude CLI. No SaaS dependencies. No build step. No vendor lock-in.
 
-## What's included
+## Outbound Pipeline
 
-| App | What it does | Port |
-|-----|-------------|------|
-| **Discovery Call Prep** | Research companies & prospects before calls | 3005 |
-| **Competitive Intelligence** | Build competitive battlecards in 3 formats | 3006 |
-| **Outbound Email** | Generate persona-based multi-touch cadences | 3008 |
-| **Onboarding Playbook** | Create segment-specific onboarding playbooks | 3004 |
-| **Prompt Builder** | Generate meeting-memory search prompts | 3007 |
-| **GTM Trends** | Spot tool & skill patterns across GTM job postings | 3009 |
-| **Morning Brief** | Daily signal detection dashboard | 3003 |
-| **Prompt Library** | Searchable library of reusable AI prompts | 3002 |
-| **Gateway** | Hub page that routes to all apps | 8000 |
+Tools that chain together to find, qualify, and reach target accounts.
 
-## Quick start
+| Tool | What it does |
+|------|-------------|
+| **Lead Enrichment** | Multi-step company enrichment — web research, tech stack, funding signals, competitive landscape |
+| **ICP Scorer** | Rule-based scoring engine with weighted dimensions — industry, size, funding, tech stack, growth, buying signals |
+| **Outbound Email** | AI-powered cold outreach sequences — persona-targeted, 4-touch cadences with research-backed personalization |
+| **GTM Signal Dashboard** | Daily signal detection — pipeline alerts, competitive intel, account changes, market signals |
+
+**Workflow:** Enrichment gathers company data → ICP Scorer qualifies the account → Outbound Email generates a personalized sequence → Signal Dashboard surfaces daily alerts.
+
+## Sales Enablement
+
+Tools that prepare reps to win deals.
+
+| Tool | What it does |
+|------|-------------|
+| **Discovery Call Prep** | Research companies and prospects before calls — company bullets, prospect background, talking points |
+| **Competitive Intelligence** | Battlecards, head-to-head comparisons, and market positioning analysis |
+| **Onboarding Playbook** | Segment-specific onboarding playbooks with milestones and success criteria |
+| **Prompt Builder** | Generate meeting-memory search prompts tailored to company and role |
+
+**Workflow:** Discovery researches the account → Competitive Intel arms the rep → deal closes → Playbook generates onboarding plan.
+
+## Infrastructure
+
+| Tool | What it does |
+|------|-------------|
+| **Pipeline Dashboard** | Deal tracking with stage-weighted metrics and pipeline visualization |
+| **GTM Trends** | Analyze GTM job postings to spot tool and skill patterns across the market |
+| **Gateway** | Reverse proxy hub — one entry point at localhost:8000 routes to all apps |
+
+## Quick Start
 
 ```bash
-git clone https://github.com/dan-sheehan/gtm-eng-toolkit.git
-cd gtm-eng-toolkit
+git clone <repo-url>
+cd gtm-tools
 make install
 make start
 # Open http://localhost:8000
@@ -30,58 +50,34 @@ make start
 
 ## Architecture
 
-```
-gtm-tools/
-├── apps/              # 9 independent Flask apps
-│   └── gateway/       # stdlib reverse proxy (no Flask)
-├── data/
-│   ├── prompts/       # Prompt template files
-│   └── contexts/      # Company context files for discovery prep
-└── hub                # Bash launcher (start/stop/status)
-```
+**Gateway pattern** — One entry point at `localhost:8000` routes to independent backends by path prefix. Each app is a standalone Flask server that can run independently on its own port.
 
-**Design decisions:**
-- **Gateway pattern** — One entry point at `localhost:8000` routes to independent backends by path prefix
-- **AI layer** — Claude CLI (`claude -p`) via subprocess with streaming output over SSE
-- **Storage** — SQLite per app, zero config, no shared state
-- **Frontend** — Vanilla HTML/CSS/JS, no build step, no node_modules
-- **Local-first** — All data stays on your machine
+**AI layer** — Claude CLI (`claude -p`) via subprocess with streaming output over Server-Sent Events. Tools that need web research pass `--allowedTools WebSearch,WebFetch`. No API keys required — works with a Claude Max subscription via CLI.
 
-## Tech stack
+**Storage** — SQLite per app (`~/.appname/appname.db`), zero config, no shared state. Apps never contend for locks, and data is easy to inspect or reset independently.
 
-Python, Flask, SQLite, Claude CLI, vanilla JavaScript, Server-Sent Events
+**Frontend** — Vanilla HTML/CSS/JS, no build step, no node_modules. Each app has a single `app.js` wrapped in an IIFE and a `style.css` with CSS variables.
+
+**Local-first** — All data stays on your machine. No external databases, no cloud storage, no telemetry.
+
+## Tech Stack
+
+Python · Flask · SQLite · Claude CLI · Vanilla JavaScript · Server-Sent Events
+
+## How AI Is Used
+
+Every AI-powered tool calls Claude CLI (`claude -p`) via subprocess and streams results to the browser over Server-Sent Events. Tools that need web research pass `--allowedTools WebSearch,WebFetch`. This means:
+
+- No API keys required (uses Claude Max subscription via CLI)
+- All AI calls are transparent — you can see exactly what prompt was sent
+- Results stream in real-time, not batch
 
 ## Requirements
 
 - Python 3.9+
-- [Claude CLI](https://docs.anthropic.com/en/docs/claude-code) (for AI-powered apps)
-
-## Commands
-
-```bash
-make install    # Install Python dependencies
-make start      # Start all apps + gateway
-make stop       # Stop everything
-make status     # Show what's running
-make test       # Run tests
-make lint       # Run linter
-```
-
-## Adding company context
-
-The discovery app can load markdown files as context for call prep. Drop company research into `data/contexts/<company-name>/`:
-
-```
-data/contexts/
-└── acme/
-    ├── notes.md
-    └── research.md
-```
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+- Flask
+- Claude CLI (for AI-powered tools — install from https://docs.anthropic.com/en/docs/claude-code)
 
 ## License
 
-MIT — see [LICENSE](LICENSE).
+MIT
