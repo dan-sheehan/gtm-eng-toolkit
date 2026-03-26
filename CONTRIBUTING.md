@@ -22,8 +22,18 @@ Thanks for your interest in contributing to GTM Tools.
 - Keep dependencies minimal — Flask + stdlib where possible
 - AI features use Claude CLI (`claude -p`) via subprocess
 
+## Testing and linting
+
+Before submitting a PR, make sure:
+
+```bash
+python3 -m pytest tests/ -v        # All tests pass
+python3 -m ruff check apps/        # No lint issues
+```
+
 ## Pull requests
 
 - Keep PRs focused — one app or feature per PR
 - Include a screenshot or description of what the app does
 - Test that `make start` still works with the gateway
+- Ensure tests pass and linter is clean (CI enforces both)
