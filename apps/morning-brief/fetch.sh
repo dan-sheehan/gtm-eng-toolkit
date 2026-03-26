@@ -1,5 +1,5 @@
 #!/bin/bash
-# Morning Brief – fetch data via Claude CLI with MCP tools
+# GTM Signal Dashboard – fetch signals via Claude CLI with MCP tools
 # Usage: ./fetch.sh            (run manually)
 #        crontab: 0 6 * * *    (daily at 6 AM)
 #
@@ -25,7 +25,7 @@ elif [ -f "$HOME/.bashrc" ]; then
   source "$HOME/.bashrc" 2>/dev/null || true
 fi
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting morning brief fetch..."
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Starting GTM signal fetch..."
 
 # Allow running from within an existing Claude Code session
 unset CLAUDECODE 2>/dev/null || true
@@ -33,14 +33,13 @@ unset CLAUDECODE 2>/dev/null || true
 # Replace TODAY placeholder in prompt with actual date
 PROMPT="$(sed "s/{{TODAY}}/$(date '+%Y-%m-%d')/g" "$PROMPT_FILE")"
 
-# Run Claude with MCP tools to fetch all data sources.
+# Run Claude with MCP tools to gather GTM signals.
 # The tool names use UUIDs from your MCP connector configuration.
 # To find your UUIDs, run: claude mcp list
 # Then update the mcp__<UUID>__<tool> entries below if needed.
 claude -p "$PROMPT" \
   --output-format text \
   --allowedTools \
-    'Bash(curl*)' \
     'Write' \
     'mcp__f7914d85-5afe-4d0d-85f1-c2725f696b95__gmail_search_messages' \
     'mcp__f7914d85-5afe-4d0d-85f1-c2725f696b95__gmail_read_message' \
@@ -52,4 +51,4 @@ claude -p "$PROMPT" \
     exit 1
   }
 
-echo "[$(date '+%Y-%m-%d %H:%M:%S')] Fetch complete."
+echo "[$(date '+%Y-%m-%d %H:%M:%S')] Signal fetch complete."

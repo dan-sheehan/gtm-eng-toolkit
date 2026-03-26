@@ -231,11 +231,11 @@ HUB_PAGE = """\
           </div>
         </div>
         <div class="card-body">
-          <div class="card-title">Morning Brief</div>
-          <div class="card-desc">Daily weather, email, calendar &amp; tasks</div>
+          <div class="card-title">Signal Dashboard</div>
+          <div class="card-desc">Daily GTM signals &mdash; pipeline alerts, competitive intel, account changes</div>
           <div class="card-tag">
             <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            Productivity
+            Signals
           </div>
         </div>
       </a>

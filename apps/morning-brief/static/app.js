@@ -1,7 +1,14 @@
-/* Morning Brief – client-side rendering */
+/* GTM Signal Dashboard – client-side rendering */
 
 (function () {
   const PREFIX = window.APP_PREFIX || "";
+
+  const CATEGORIES = [
+    { key: "pipeline",    cardId: "pipeline-card",    emptyMsg: "No pipeline alerts" },
+    { key: "competitive", cardId: "competitive-card",  emptyMsg: "No competitive signals" },
+    { key: "accounts",    cardId: "accounts-card",     emptyMsg: "No account signals" },
+    { key: "market",      cardId: "market-card",       emptyMsg: "No market signals" },
+  ];
 
   // -----------------------------------------------------------------------
   // Fetch & render
@@ -14,16 +21,27 @@
 
       if (data.error && !data.generated_at) {
         showError(data.error);
+        showEmpty();
         return;
       }
       hideError();
       renderTimestamp(data.generated_at);
-      renderWeather(data.weather);
-      renderCalendar(data.calendar);
-      renderEmails(data.emails);
-      renderTasks(data.tasks);
+      renderAllSignals(data.signals);
     } catch (err) {
-      showError("Failed to load brief data.");
+      showError("Failed to load signal data.");
+      showEmpty();
+    }
+  }
+
+  // -----------------------------------------------------------------------
+  // Show empty state for all cards
+  // -----------------------------------------------------------------------
+
+  function showEmpty() {
+    for (const cat of CATEGORIES) {
+      const body = document.querySelector(`#${cat.cardId} .card-body`);
+      body.className = "card-body";
+      body.innerHTML = `<div class="unavailable">No signals fetched yet</div>`;
     }
   }
 
@@ -43,114 +61,49 @@
   }
 
   // -----------------------------------------------------------------------
-  // Weather
+  // Render all signal categories
   // -----------------------------------------------------------------------
 
-  function renderWeather(weather) {
-    const body = document.querySelector("#weather-card .card-body");
-    if (!weather || weather.error) {
-      body.innerHTML = `<div class="unavailable">${esc(weather?.error || "Weather unavailable")}</div>`;
+  function renderAllSignals(signals) {
+    if (!signals) {
+      showEmpty();
       return;
     }
-    body.className = "card-body";
-    body.innerHTML = `
-      <div class="weather-main">
-        <div class="weather-temp">${esc(String(weather.temp_f))}&deg;F</div>
-        <div class="weather-condition">${esc(weather.condition)}</div>
-      </div>
-      <div class="weather-details">
-        <span>H: ${esc(String(weather.high_f))}&deg;</span>
-        <span>L: ${esc(String(weather.low_f))}&deg;</span>
-        <span>Sunset: ${esc(weather.sunset)}</span>
-        <span>${esc(weather.location)}</span>
-      </div>`;
+    for (const cat of CATEGORIES) {
+      renderSignalCategory(cat, signals[cat.key]);
+    }
   }
 
-  // -----------------------------------------------------------------------
-  // Calendar
-  // -----------------------------------------------------------------------
+  function renderSignalCategory(cat, signals) {
+    const body = document.querySelector(`#${cat.cardId} .card-body`);
 
-  function renderCalendar(events) {
-    const body = document.querySelector("#calendar-card .card-body");
-    if (!events || events.error) {
-      body.innerHTML = `<div class="unavailable">${esc(events?.error || "Calendar unavailable")}</div>`;
+    if (!signals || !Array.isArray(signals) || signals.length === 0) {
+      body.className = "card-body";
+      body.innerHTML = `<div class="unavailable">${esc(cat.emptyMsg)}</div>`;
       return;
     }
-    if (events.length === 0) {
-      body.innerHTML = `<div class="unavailable">No events today</div>`;
-      return;
-    }
+
     body.className = "card-body";
-    const items = events.map(ev => {
-      const link = ev.video_link
-        ? `<a class="event-link" href="${esc(ev.video_link)}" target="_blank" rel="noopener">Join</a>`
-        : "";
-      return `<li class="event-item">
-        <span class="event-time">${esc(ev.time)}</span>
-        <span class="event-title">${esc(ev.title)}</span>
-        ${link}
-      </li>`;
-    }).join("");
-    body.innerHTML = `<ul class="event-list">${items}</ul>`;
-  }
-
-  // -----------------------------------------------------------------------
-  // Emails
-  // -----------------------------------------------------------------------
-
-  function renderEmails(emails) {
-    const body = document.querySelector("#email-card .card-body");
-    if (!emails || emails.error) {
-      body.innerHTML = `<div class="unavailable">${esc(emails?.error || "Email unavailable")}</div>`;
-      return;
-    }
-    if (emails.length === 0) {
-      body.innerHTML = `<div class="unavailable">No unread emails</div>`;
-      return;
-    }
-    body.className = "card-body";
-    const items = emails.map(em => `
-      <li class="email-item">
-        <div class="email-header">
-          <span class="email-from">${esc(em.from)}</span>
+    const items = signals.map(signal => {
+      const sevClass = severityClass(signal.severity);
+      return `<li class="signal-item">
+        <span class="severity-dot ${sevClass}"></span>
+        <div class="signal-content">
+          <div class="signal-title">${esc(signal.title)}</div>
+          <div class="signal-desc">${esc(signal.description)}</div>
         </div>
-        <div class="email-subject">${esc(em.subject)}</div>
-        ${em.summary ? `<div class="email-summary">${esc(em.summary)}</div>` : ""}
-      </li>`
-    ).join("");
-    body.innerHTML = `<ul class="email-list">${items}</ul>`;
-  }
-
-  // -----------------------------------------------------------------------
-  // Tasks
-  // -----------------------------------------------------------------------
-
-  function renderTasks(tasks) {
-    const body = document.querySelector("#tasks-card .card-body");
-    if (!tasks || tasks.error) {
-      body.innerHTML = `<div class="unavailable">${esc(tasks?.error || "Tasks unavailable")}</div>`;
-      return;
-    }
-    if (tasks.length === 0) {
-      body.innerHTML = `<div class="unavailable">No tasks due today</div>`;
-      return;
-    }
-    body.className = "card-body";
-    const items = tasks.map(t => {
-      const priorityClass = t.priority
-        ? `badge-priority-${t.priority.toLowerCase()}`
-        : "";
-      const badges = [
-        t.status ? `<span class="badge badge-status">${esc(t.status)}</span>` : "",
-        t.priority ? `<span class="badge ${priorityClass}">${esc(t.priority)}</span>` : "",
-        t.project ? `<span class="badge badge-project">${esc(t.project)}</span>` : "",
-      ].filter(Boolean).join(" ");
-      return `<li class="task-item">
-        <span class="task-title">${esc(t.title)}</span>
-        ${badges}
       </li>`;
     }).join("");
-    body.innerHTML = `<ul class="task-list">${items}</ul>`;
+
+    body.innerHTML = `<ul class="signal-list">${items}</ul>`;
+  }
+
+  function severityClass(severity) {
+    switch ((severity || "").toLowerCase()) {
+      case "high":   return "severity-high";
+      case "medium": return "severity-medium";
+      default:       return "severity-low";
+    }
   }
 
   // -----------------------------------------------------------------------
@@ -212,10 +165,7 @@
             if (data.generated_at) {
               hideError();
               renderTimestamp(data.generated_at);
-              renderWeather(data.weather);
-              renderCalendar(data.calendar);
-              renderEmails(data.emails);
-              renderTasks(data.tasks);
+              renderAllSignals(data.signals);
             }
           }
         } catch {

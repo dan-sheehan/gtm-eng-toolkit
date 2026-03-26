@@ -1,108 +1,99 @@
-You are generating a morning brief. Fetch data from the sources below and write the result as a single JSON file to ~/.morning-brief/latest.json using the Write tool.
+You are generating a GTM signal detection report. Gather signals from the sources below and write the result as a single JSON file to ~/.morning-brief/latest.json using the Write tool.
 
 Today's date is: {{TODAY}}
 
 ## Instructions
 
-Fetch each data source independently. If any source fails, include an `"error"` key in that section with a short explanation, and continue with the remaining sources. Always produce valid JSON.
+Fetch each signal source independently. If any source fails, include an empty array for that category and continue with the remaining sources. Always produce valid JSON.
 
-### 1. Weather (Seattle, WA)
+### 1. Pipeline Alerts (Gmail + Calendar)
 
-Run this command via Bash:
-```
-curl -s "wttr.in/Seattle?format=j1"
-```
+Search Gmail for deal-related emails using `gmail_search_messages`:
+- Query: `subject:(deal OR pipeline OR renewal OR contract OR proposal OR negotiation OR pricing) newer_than:3d` with `maxResults: 10`
+- Look for: deals going silent, upcoming close dates, renewal deadlines, stalled negotiations, pricing discussions
 
-From the JSON response, extract:
-- `current_condition[0].weatherDesc[0].value` → condition
-- `current_condition[0].temp_F` → temp_f (as integer)
-- `weather[0].maxtempF` → high_f (as integer)
-- `weather[0].mintempF` → low_f (as integer)
-- `weather[0].astronomy[0].sunset` → sunset
-
-If curl fails or returns invalid data, set weather to `{"error": "Weather unavailable"}`.
-
-### 2. Unread Emails (Gmail)
-
-Use the `gmail_search_messages` tool with query `is:unread in:inbox category:primary` and `maxResults: 10`.
-
-For each message returned, extract:
-- `from`: sender name and email
-- `subject`: email subject line
-- `summary`: first 1-2 sentences of the email body, or the snippet if body is not available
-
-Cap at 10 emails. If the tool fails, set emails to `{"error": "Gmail unavailable"}`.
-
-### 3. Calendar Events (Google Calendar)
-
-Use the `gcal_list_events` tool with:
+Also check Google Calendar using `gcal_list_events` for upcoming deal-related meetings:
 - `calendarId`: "primary"
 - `timeMin`: "{{TODAY}}T00:00:00"
 - `timeMax`: "{{TODAY}}T23:59:59"
 - `timeZone`: "America/Los_Angeles"
+- Look for events with keywords like "deal review", "pipeline", "forecast", "QBR", "renewal", "negotiation"
 
-For each event, extract:
-- `time`: formatted as "9:00 AM - 10:00 AM" (use start/end dateTime). For all-day events, use "All day".
-- `title`: event summary
-- `video_link`: hangout link, Google Meet link, or Zoom link from the event (null if none)
+From these sources, identify pipeline signals — deals at risk, upcoming close dates, stalled opportunities, renewal deadlines.
 
-If the tool fails, set calendar to `{"error": "Calendar unavailable"}`.
+### 2. Competitive Signals (Gmail)
 
-### 4. Notion Tasks Due Today
+Search Gmail for competitive intelligence using `gmail_search_messages`:
+- Query: `subject:(competitor OR competitive OR versus OR vs OR alternative OR switch OR churn) newer_than:7d` with `maxResults: 10`
+- Look for: competitor mentions, win/loss reports, competitive displacement attempts, feature comparisons
 
-Use the `notion-search` tool to search the Tasks database for tasks due today.
+Identify competitive signals — competitor activity, lost deal post-mortems, competitive feature launches.
 
-The Tasks database data source ID is: `collection://13ece276-b687-457c-b6f1-480692ba8b5a`
+### 3. Account Signals (Gmail + Notion)
 
-Search for tasks and then use `notion-fetch` on the database URL `https://www.notion.so/f317ee8fb2f4407aa54144c7225d3dc3` to get current tasks. Filter for tasks where:
-- Due Date matches today ({{TODAY}})
-- Status is NOT "Done"
+Search Gmail for account change signals using `gmail_search_messages`:
+- Query: `(subject:(promotion OR "new role" OR "joined" OR "leaving" OR funding OR acquisition OR hiring) OR from:linkedin) newer_than:7d` with `maxResults: 10`
+- Look for: champion job changes, org restructures, funding announcements, leadership changes
 
-For each matching task, extract:
-- `title`: Task name
-- `status`: Status value (e.g., "To Do", "In Progress", "Waiting")
-- `priority`: Priority value (e.g., "High", "Medium", "Low")
-- `project`: Project value (e.g., "Personal", "Work", "Career")
+Also check Notion for account-related tasks using `notion-search`:
+- Search for tasks related to accounts, follow-ups, or account reviews
 
-If the tool fails or no tasks match, set tasks to an empty array `[]`.
+Identify account signals — champion movements, funding events, org changes, hiring patterns.
 
-### 5. Output
+### 4. Market Signals (Gmail)
 
-Assemble all sections into this exact JSON structure and write it to `~/.morning-brief/latest.json`:
+Search Gmail for market and industry signals using `gmail_search_messages`:
+- Query: `subject:(market OR industry OR regulation OR trend OR report OR analyst OR forecast) newer_than:7d` with `maxResults: 10`
+- Look for: industry reports, regulatory changes, market trend newsletters, analyst briefings
+
+Identify market signals — relevant industry news, regulatory changes, market shifts.
+
+### 5. Signal Classification
+
+For each signal you identify, assign:
+- **severity**: "high" (requires action today), "medium" (worth knowing), or "low" (background awareness)
+- **title**: A concise headline (under 80 characters)
+- **description**: 1-2 sentences of context explaining why this matters and what action to consider
+
+Prioritize quality over quantity. Only include genuine signals, not routine emails. If a category has no meaningful signals, return an empty array for it.
+
+### 6. Output
+
+Assemble all signals into this exact JSON structure and write it to `~/.morning-brief/latest.json`:
 
 ```json
 {
   "generated_at": "<current ISO 8601 timestamp>",
-  "weather": {
-    "location": "Seattle, WA",
-    "condition": "<condition text>",
-    "temp_f": <integer>,
-    "high_f": <integer>,
-    "low_f": <integer>,
-    "sunset": "<time string>"
-  },
-  "emails": [
-    {
-      "from": "<sender>",
-      "subject": "<subject>",
-      "summary": "<one-line summary>"
-    }
-  ],
-  "calendar": [
-    {
-      "time": "<formatted time range>",
-      "title": "<event title>",
-      "video_link": "<url or null>"
-    }
-  ],
-  "tasks": [
-    {
-      "title": "<task name>",
-      "status": "<status>",
-      "priority": "<priority>",
-      "project": "<project>"
-    }
-  ]
+  "signals": {
+    "pipeline": [
+      {
+        "severity": "high|medium|low",
+        "title": "<signal headline>",
+        "description": "<1-2 sentence context>"
+      }
+    ],
+    "competitive": [
+      {
+        "severity": "high|medium|low",
+        "title": "<signal headline>",
+        "description": "<1-2 sentence context>"
+      }
+    ],
+    "accounts": [
+      {
+        "severity": "high|medium|low",
+        "title": "<signal headline>",
+        "description": "<1-2 sentence context>"
+      }
+    ],
+    "market": [
+      {
+        "severity": "high|medium|low",
+        "title": "<signal headline>",
+        "description": "<1-2 sentence context>"
+      }
+    ]
+  }
 }
 ```
 
